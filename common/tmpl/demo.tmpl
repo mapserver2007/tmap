@@ -1,0 +1,212 @@
+<div class="widehead">
+	<ul>
+		<li>TMAP::DEMO</li>
+	</ul>
+</div>
+<div class="tmap_explain">
+	<p>TMAPとは</p>
+	<div>
+		TMAPはPHPとJavascriptで開発されたWebGISです。<br/>
+		地図描画エンジンにMapServer、地図データに国土地理院数値地図を利用しています。
+	</div>
+</div>
+<div id="tmap_container" style="margin-bottom:10px;"></div>
+<div class="widehead">
+	<ul>
+		<li>TMAP::SYNOPSIS</li>
+	</ul>
+</div>
+<div class="tmap_explain">
+	<p>TMAP利用方法</p>
+	<div>
+		TMAPはJavascriptが実行できる環境ならばどこでも簡単に利用することができます。<br/>
+		利用するためには、適用するページのhead部分に次の記述をします。
+	</div>
+<pre class="prettyprint">
+&lt;script src="http://summer-lights.dyndns.ws/tmap/tmap3/js/trigger.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function(){
+	new TMAP()
+		.setOutFrame(780, 350)
+		.setLngLat(139.69398813,35.7573271929)
+		.setScale(5)
+		.setMapFrame("tmap_container")
+		.setSlider()
+		.load();
+});
+&lt;/script&gt;</pre>
+</div>
+<div class="tmap_explain">
+	<p>TMAPパラメータ仕様</p>
+	<div>
+		TMAPをサイトに組み込むときに指定できるパラメータを示します。
+	</div>
+	<div class="tmap_use_explain">
+		<p>setOutFrame(int WIDTH, int HEIGHT) (必須)</p>
+		<ul>
+			<li>WIDTHには表示する地図の横幅を指定</li>
+			<li>HEIGHTには表示する地図の縦幅を指定</li>
+		</ul>
+		<p>setLngLat(double LONGITUDE, double LATITUDE) (省略可)</p>
+		<ul>
+			<li>LONGITUDEには初期状態で表示される経度を指定</li>
+			<li>LATITUDEには初期状態で表示される緯度を指定</li>
+			<li>省略時は[139.762295, 35.69246]が設定される</li>
+		</ul>
+		<p>setAddress(String ADDRESS) (省略可)</p>
+		<ul>
+			<li>ADDRESSには住所(を含む文字列)を指定</li>
+			<li>複数の住所が含まれていた場合、初めに指定された住所が設定される。</li>
+			<li>省略時は住所は設定されないで経緯度が設定される。</li>
+			<li>setLngLat()とsetAddress()が同時に指定された場合、setAddress()が優先される。</li>
+		</ul>
+		<p>setBlogeo(Object PARAMS) (省略可)</p>
+		<ul>
+			<li>PARAMSは省略可能</li>
+			<li>PARAMSには「dist」「num」「popup」が指定できる</li>
+			<li>「dist」は現在位置から半径distメートル圏内のブログデータを検索する</li>
+			<li>「num」は最大num件のブログデータを表示する</li>
+			<li>「popup」は1を指定した場合、地図上のブログマーカーを押下すると詳細情報をポップアップする</li>
+			<li>指定方法はJSON記法で行う(例：{dist: 30000})</li>
+			<li>省略時は{dist: 100000, num: 100, popup: 0}が指定される</li>
+		</ul>
+		<p>setScale(int SCALE_IDX) (省略可)</p>
+		<ul>
+			<li>SCALE_IDXにはスケールインデックスを指定</li>
+			<li>SCALE_IDXは[1ｸA訓3]の間で設定する</li>
+			<li>省略時はSCALE_IDXが[5]に設定される</li>
+		</ul>
+		<p>setMapFrame(String FIELD) (必須)</p>
+		<ul>
+			<li>FIELDには地図を表示する要素IDを指定</li>
+			<li>存在しないFIELD名の場合はbody直下に地図が表示される</li>
+		</ul>
+		<p>setSlider(void) (省略可)</p>
+		<ul>
+			<li>地図を拡大・縮小するためのスライダーが表示される</li>
+			<li>省略時は拡大・縮小ができない</li>
+		</ul>
+		<p>load(void) (必須)</p>
+		<ul>
+			<li>TMAPをロードする</li>
+		</ul>
+		<br/>
+		<p style="color:red;">
+			※load()は必ず一番最後に指定してください<br/>
+			※予告なく仕様変更することがあります<br/>
+			※導入によりいかなる損害・障害があっても関知いたしません
+		</p>
+	</div>
+	<p>対応GETパラメータ</p>
+	<div>
+		TMAPをサイトに組み込んだときに指定できるGETパラメータを示します。
+	</div>
+	<div class="tmap_use_explain">
+		<p>http://(サーバ名)?lng=(経度)&lat=(緯度)&s=(スケールインデックス[1-12])</p>
+		<ul>
+			<li>サンプルリクエスト</li>
+			<li>http://summer-lights.dyndns.ws/tmap/?lng=139.826941&lat=35.643897&s=5</li>
+		</ul>
+	</div>
+</div>
+<div class="widehead">
+	<ul>
+		<li>TMAP_API::DEMO</li>
+	</ul>
+</div>
+<div class="tmap_explain">
+	<p>TMAP_APIとは</p>
+	<div>
+		TMAP_APIは文字列から住所を自動抽出し、その地点の地図を返すTMAPのAPIです。<br/>
+	</div>
+	<div class="tmap_use_explain">
+		<p>TMAP_APIデモ実行手順</p>
+		<ul>
+			<li>(1) 下部のフォームに住所を含んだ文字列を入力する</li>
+			<li>(2) 「解析」ボタンを押下</li>
+			<li>(3) 住所がハイライトされ、隣にアイコンが表示される</li>
+			<li>(4) アイコンをクリックすると地図が表示される</li>
+		</ul>
+	</div>
+	<div class="tmapi_container">
+		<div style="padding:5px;">
+			<textarea id="input" class="form_textarea" style="width:800px; height:200px;">大学は東京都千代田区神田錦町2-2にあります。</textarea><br />
+			<input type="radio" name="apiname" value="tmapi" id="tmapi" checked="checked"/><label for="tmapi">Perl製TMAP APIで抽出</label>
+			<input type="radio" name="apiname" value="jtmapi" id="jtmapi"/><label for="jtmapi">Java版TMAP APIで抽出</label>
+			<br/>
+			<input id="extract" type="button" class="submit" value="解析" />
+			<input id="clear" type="button" class="submit" value="クリア" />
+			<br/><br/>
+			<div id="output" class="form_textarea" style="width:800px; height:200px;">解析結果をここに表示します</div>
+		</div>
+	</div>
+</div>
+<div class="widehead">
+	<ul>
+		<li>TMAP_API::SYNOPSIS</li>
+	</ul>
+</div>
+<div class="tmap_explain">
+	<p>TMAP_API利用方法</p>
+	<div>
+		TMAP_APIはJavascriptが実行できる環境ならばどこでも簡単に利用することができます。<br/>
+		利用するためには、適用するページのhead部分に次の記述をします。
+	</div>
+<pre class="prettyprint">
+&lt;script src="http://summer-lights.dyndns.ws/tmap/tmapi2/js/trigger.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script&gt;
+$(function(){
+	new TMAP_API()
+		.setExtractFormat("uri")
+		.setExtractElement("output")
+		.setApiKey("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+		.extract();
+});
+&lt;/script&gt;</pre>
+</div>
+<div class="tmap_explain">
+	<p>TMAP_APIパラメータ仕様</p>
+	<div class="tmap_use_explain">
+		<p>setExtractAPI(String API_NAME) (省略可)</p>
+		<ul>
+			<li><s>API_NAMEには「oki」または「gaj」を指定</s></li>
+			<li><s>(ただし、gajでは地図表示機能非サポート)</s></li>
+			<li><s>省略時は「oki」が自動的に設定される</s></li>
+			<li>2009.10.19編集　setExtractAPI()は削除しました。自動的に「oki」に設定されます。</li>
+		</ul>
+		<p>setExtractFormat(String FORMAT) (省略可)</p>
+		<ul>
+			<li>FORMATには「uri」または「para」を指定</li>
+			<li>「uri」の場合、現在のページ内容すべてから住所を抽出する</li>
+			<li>「para」が住所を含む文字列の場合、指定した領域(後述)の内容から住所を抽出する</li>
+		</ul>
+		<p>setExtractElement(String FIELD) (省略可)</p>
+		<ul>
+			<li>FIELDには抽出するHTML要素IDを指定</li>
+			<li>IDを指定すると、IDの内容のみを動的に書き換える</li>
+			<li>省略時はページ全体を動的に書き換える</li>
+		</ul>
+		<p>setApiKey(String APIKEY) (必須)</p>
+		<ul>
+			<li>APIKEYには64桁のAPIキーを指定</li>
+		</ul>
+		<p>setApiName(String APINAME) (任意)</p>
+		<ul>
+			<li>APINAMEには使用するAPI名を指定</li>
+			<li>「tmapi」の場合、Perl製のAPIを利用する</li>
+			<li>「jtmapi」の場合、Java製のAPIを利用する</li>
+			<li>省略時は「tmapi」を利用する</li>
+		</ul>
+		<p>extract(void) (必須)</p>
+		<ul>
+			<li>住所抽出、ハイライト処理を実行する</li>
+		</ul>
+		<br/>
+		<p style="color:red;">
+			※extract()は必ず一番最後に指定してください<br/>
+			※予告なく仕様変更することがあります<br/>
+			※導入によりいかなる損害・障害があっても関知いたしません
+		</p>
+	</div>
+</div>
+<script type="text/javascript" language="JavaScript">prettyPrint();</script>

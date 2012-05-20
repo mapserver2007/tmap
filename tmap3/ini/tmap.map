@@ -1,0 +1,688 @@
+# Start of map file 
+
+MAP
+EXTENT 138.8828710940 35.4531390169 139.8588995360 36.0511532381
+#EXTENT 138.8828710940 35.4531390169 139.8588995360 35.9411532381
+##EXTENT 139.4428710940 35.4531390169 140.4188995360 35.9411532381
+FONTSET "./fonts/fonts.list" 
+SYMBOLSET "./symbol.sym"
+IMAGECOLOR 51 204 204
+#IMAGECOLOR 0 191 255
+IMAGETYPE png
+INTERLACE OFF #not recomand
+SIZE 800 400
+RESOLUTION 96
+UNITS dd
+SCALE 100
+
+PROJECTION
+"init=epsg:4326"
+END
+
+OUTPUTFORMAT
+	NAME png
+	DRIVER "GD/PNG"
+	MIMETYPE "image/png"
+	IMAGEMODE RGB
+	FORMATOPTION  INTERLACE=OFF
+	TRANSPARENT OFF
+END #outputformat
+
+OUTPUTFORMAT
+	NAME png8
+	DRIVER "GD/PNG"
+	MIMETYPE "image/png"
+	IMAGEMODE PC256
+	FORMATOPTION  INTERLACE=OFF
+	TRANSPARENT OFF
+END #outputformat
+
+# Start of web interface definition
+
+# Start of Reference map definition
+#REFERENCE
+#	EXTENT 138.942871094 35.4531390169 139.918899536 35.9411532381
+#	IMAGE "./images/reference.png"
+#	SIZE 200 100
+#	COLOR -1 -1 -1
+#	OUTLINECOLOR 255 0 0
+#END  # Reference
+
+LEGEND
+	STATUS off
+	IMAGECOLOR 200 200 200
+END #legend
+
+# Start of ScaleBar definition
+
+SCALEBAR
+	STATUS ON
+	INTERVALS 1
+	SIZE 100 3
+	UNITS kilometers
+	COLOR 0 0 0
+	IMAGECOLOR 255 255 255
+	BACKGROUNDCOLOR 0 0 0
+	STYLE 0
+	POSTLABELCACHE true
+	LABEL
+		COLOR 0 0 0
+		SIZE tiny
+	END  # Label
+END  # SCALEBAR
+
+#================== START OF LAYER SECTION =====================#
+
+#行政界
+LAYER
+	NAME "gyoseikai_polygon"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "geom from gyoseikai_polygon"
+	STATUS ON
+	TYPE polygon
+	CLASS
+		NAME "行政界"
+		COLOR 245 245 245
+		#COLOR 235 235 235
+	SIZE 1
+	END
+	PROJECTION
+		"init=epsg:4326"
+	END
+END   #layer gyoseikai_polygon
+
+
+#街区
+LAYER
+	LABELITEM "opt2"
+	LABELMAXSCALE 5000
+	NAME "gaiku"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "the_geom from gaiku2500"
+	STATUS ON
+	TYPE POLYGON
+	MAXSCALE 50000
+	METADATA
+		"DESCRIPTION" "街区"
+	END  #METADATA
+	CLASS
+		NAME '街区'
+		TEXT ([opt2][opt3])
+		#MAXSCALE 200000
+		#COLOR 204 255 204
+		COLOR 255 255 255
+		OUTLINECOLOR 180 180 180
+		LABEL
+			COLOR 105 105 105
+			TYPE TRUETYPE
+			PARTIALS FALSE
+			FONT Osaka
+			SIZE 8
+			POSITION cc
+			MINDISTANCE 30
+			BUFFER 10
+			ENCODING "UTF-8"
+		END #label
+	END #class
+	PROJECTION
+		"init=epsg:4326"
+	END #projection
+END #layer gaiku
+
+
+#建物
+LAYER
+	LABELITEM "opt2"
+	LABELMAXSCALE 20000
+	NAME "tatemono"
+	GROUP "tatemono"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "the_geom from tatemono2500"
+	STATUS ON
+	TYPE POLYGON
+	MAXSCALE 100000
+	METADATA
+		"DESCRIPTION" "建物"
+	END  #METADATA
+	CLASS
+		NAME '建物'
+		EXPRESSION ([opt1]!=3543)
+		COLOR 102 255 153
+		LABEL
+			COLOR 100 100 100
+			OUTLINECOLOR 255 255 255
+			PARTIALS FALSE
+			TYPE TRUETYPE
+			FONT Osaka
+			SIZE 8
+			POSITION cc
+			MINDISTANCE 30
+			BUFFER 10
+			ENCODING "UTF-8"
+		END #label
+	END #class
+#	CLASS
+#		NAME '駅'
+#		EXPRESSION ([opt1]=3543)
+#		COLOR 100 100 100
+#		LABEL
+#			COLOR 255 0 0
+#			OUTLINECOLOR 255 255 255
+#			TYPE TRUETYPE
+#			FONT Osaka
+#			SIZE 8
+#			POSITION cc
+#			#	MINDISTANCE 30
+#			ENCODING "UTF-8"
+#		END #label
+#	END #class
+	PROJECTION
+		"init=epsg:4326"
+	END #projection
+END #layer tatemono
+
+
+#場地
+LAYER
+	LABELITEM "opt1"
+	LABELMAXSCALE 100000
+	NAME "zyouti"
+	GROUP "tatemono"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "the_geom from zyouti2500"
+	STATUS ON
+	TYPE POLYGON
+	MAXSCALE 100000
+	METADATA
+		"DESCRIPTION" "場地"
+	END  #METADATA
+	CLASS
+		NAME '場地(公園等)' #凡例で使用される名前
+		EXPRESSION ([opt1]!=NULL)
+		COLOR 0 250 154
+		#COLOR 60 179 113
+		LABEL
+			COLOR 0 0 0
+			PARTIALS FALSE
+			TYPE TRUETYPE
+			FONT WTTUIGothic
+			SIZE 10
+			POSITION cc
+			#	MINDISTANCE 30
+			BUFFER 20
+			ENCODING "UTF-8"
+		END #label
+	END #class
+	PROJECTION
+		"init=epsg:4326"
+	END #projection
+END #layer tatemono
+
+
+#河川
+LAYER
+	LABELITEM "opt1"
+	MAXSCALE 400000
+	LABELMAXSCALE 50000
+	NAME "mizu"  
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "the_geom from mizu2500"
+	STATUS ON
+	TYPE POLYGON
+	METADATA
+		"DESCRIPTION" "河川"
+	END  #METADATA
+	CLASS
+		NAME '河川'
+		TEXT ([opt1])
+		COLOR 51 204 204
+		LABEL
+			COLOR 0 0 255
+			TYPE TRUETYPE
+			PARTIALS FALSE
+			FONT WTTUIGothic
+			SIZE 10
+			BUFFER 10
+			POSITION auto
+			MINDISTANCE 60
+			BUFFER 30
+			ENCODING UTF-8
+		END #label
+	END #class
+	PROJECTION
+		"init=epsg:4326"
+	END
+END #end of layer mizu
+
+
+#行政界
+LAYER
+	NAME "gyoseikai" #行政界
+	GROUP "gyoseikai"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "geom from gyoseikai"
+	STATUS ON
+	TYPE LINE
+	#FILTER "shurui=1"
+	METADATA
+		"DESCRIPTION" "行政界"
+	END	#METADATA
+	CLASS
+		NAME "都道府県界"
+		EXPRESSION ([shurui]=1)
+		MINSCALE 500000
+		SYMBOL 'defline'
+		SIZE 1
+		COLOR 51 204 204
+	END	#CLASS
+	CLASS
+		NAME "都道府県界"
+		#EXPRESSION ([shurui]=1)
+		MAXSCALE 500000
+		SYMBOL 'defline'
+		SIZE 1
+		COLOR 51 204 204
+	END	#CLASS
+END	#LAYER
+
+
+#行政代表点東京25000
+#LAYER
+#	LABELITEM "namae"
+#	NAME "gyoseidaihyoten"
+#	GROUP "gyoseikai"
+#	CONNECTIONTYPE postgis
+#	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+#	DATA "geom from gyoseidaihyoten"
+#	STATUS ON
+#	TYPE POINT
+#	METADATA
+#		"DESCRIPTION" "行政代表点"
+#	END	#METADATA
+#	CLASS	
+#		NAME '市区町村'
+#		EXPRESSION ([shubetsu]=3)
+#		MAXSCALE 300000
+#		COLOR 0 0 0
+#		#symbol 'square'
+#		size 8
+#		LABEL
+#			COLOR 255 255 255
+#			OUTLINECOLOR 128 128 128
+#			#SHADOWSIZE 2 2
+#			TYPE TRUETYPE
+#			FONT Osaka
+#			SIZE 10
+#			POSITION cc
+#			#PARTIALS FALSE
+#			#MINDISTANCE 300
+#			ENCODING UTF-8
+#		END #label
+#	END #class
+#END # LAYER
+
+#行政界都市東京
+#LAYER
+#	LABELITEM "opt2"
+#	LABELMAXSCALE 250000
+#	LABELMINSCALE 50000
+#	NAME "gyoseidaihyoten"	#公共代表点
+#	GROUP "gyoseikai"
+#	CONNECTIONTYPE postgis
+#	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+#	DATA "the_geom from gyousei_city2500"
+#	STATUS ON
+#	TYPE POLYGON
+#	METADATA
+#		"DESCRIPTION" "行政代表点"
+#	END	#METADATA
+#	CLASS	
+#		NAME '地区町村'
+#		TEXT ([opt2])
+#		#COLOR 0 0 0
+#		#symbol 'square'
+#		size 6
+#		LABEL
+#			COLOR 255 255 255
+#			OUTLINECOLOR 0 0 0
+#			#SHADOWSIZE 2 2
+#			TYPE TRUETYPE
+#			FONT Osaka		#フォント指定
+#			SIZE 8
+#			POSITION cc
+#			#PARTIALS FALSE
+#			#MINDISTANCE 300
+#			ENCODING UTF-8
+#		END #label
+#	END #class
+#	PROJECTION
+#		"init=epsg:4326"
+#	END #projection
+#END # LAYER
+
+#道路
+LAYER
+	LABELMAXSCALE 100000
+	NAME "dorokukan"
+	GROUP "dorokukan"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "geom from dorokukan"
+	STATUS ON
+	TYPE LINE
+	SYMBOLSCALE 15000
+	FILTER "fukuin=4"
+	CLASS
+		NAME "5.5m以上13.0m未満"
+		TEXT ([namae])
+		COLOR 153 255 153
+		SYMBOL 'defline'
+		MAXSCALE 300000
+		SIZE 2
+		LABEL
+			COLOR 255 255 255
+			OUTLINECOLOR 51 102 255
+			BUFFER 30
+			PARTIALS FALSE
+			TYPE TRUETYPE
+			FONT WTTUIGothic
+			SIZE 10
+			POSITION auto
+			MINDISTANCE 60
+			ANGLE AUTO
+			ENCODING UTF-8
+		END #label
+	END	#class
+END
+
+LAYER
+	LABELMAXSCALE 100000
+	NAME "dorokukan"
+	GROUP "dorokukan"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "geom from dorokukan"
+	STATUS ON
+	TYPE LINE
+	SYMBOLSCALE 15000
+	FILTER "fukuin=5"
+	CLASS
+		NAME "13.0m以上"
+		TEXT ([namae])
+		#COLOR 153 204 153
+		COLOR 153 204 153
+		SYMBOL 'defline'
+		MAXSCALE 1000000
+		SIZE 4
+		LABEL
+			COLOR 255 255 255
+			OUTLINECOLOR 51 102 0
+			BUFFER 10
+			PARTIALS FALSE
+			TYPE TRUETYPE
+			FONT WTTUIGothic
+			SIZE 10
+			POSITION auto
+			MINDISTANCE 60
+			ANGLE AUTO
+			ENCODING UTF-8
+		END #label
+	END	#class
+END
+
+#鉄道
+LAYER
+	LABELITEM "opt1"
+	#MAXSCALE 300000
+	LABELMAXSCALE 100000
+	NAME "tetsudo"  
+	GROUP "tetsudokukan"
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "the_geom from tetsudokukan2500"
+	STATUS ON
+	TYPE LINE
+	#SYMBOLSCALE 2500
+	METADATA
+		"DESCRIPTION" "鉄道"
+	END  #METADATA
+	CLASS
+		NAME '鉄道'
+		TEXT ([opt1])
+		MAXSCALE 300000
+		MINSCALE 50000
+		STYLE
+			#COLOR 255 255 255
+			COLOR 102 102 102
+			SYMBOL 'point'
+			SIZE 2
+		END
+		STYLE
+			COLOR 255 255 255
+			SYMBOL 'rectangle-train'
+			SIZE 1
+		END
+		LABEL
+			COLOR 0 0 0
+			OUTLINECOLOR 255 255 255
+			BUFFER 10
+			PARTIALS FALSE
+			ANGLE AUTO
+			TYPE TRUETYPE
+			FONT WTTUIGothic
+			SIZE 10
+			POSITION auto
+			MINDISTANCE 60
+			ENCODING UTF-8
+		END #label
+	END #class
+	CLASS
+		NAME '鉄道'
+		TEXT ([opt1])
+		MAXSCALE 50000
+		STYLE
+			#COLOR 255 255 255
+			COLOR 102 102 102
+			SYMBOL 'point'
+			SIZE 4
+		END
+		STYLE
+			COLOR 255 255 255
+			SYMBOL 'rectangle-train'
+			SIZE 2
+		END
+		LABEL
+			COLOR 0 0 0
+			OUTLINECOLOR 255 255 255
+			#BUFFER 50
+			PARTIALS FALSE
+			ANGLE AUTO
+			TYPE TRUETYPE
+			FONT WTTUIGothic
+			SIZE 10
+			POSITION auto
+			MINDISTANCE 60
+			ENCODING UTF-8
+		END #label
+	END #class
+	PROJECTION
+		"init=epsg:4326"
+	END
+END #end of layer tetsudo
+
+
+#駅
+LAYER
+	LABELITEM "opt1"
+	LABELMAXSCALE 150000
+	MAXSCALE 150000
+	NAME "eki"
+	GROUP "tetsudokukan"
+	TRANSPARENCY alpha
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "the_geom from eki2500"
+	STATUS ON
+	TYPE POINT
+	METADATA
+		"DESCRIPTION" "駅"
+	END  #METADATA
+	CLASS
+		NAME '駅'
+		TEXT ([opt1])
+		#COLOR 255 0 0
+		STYLE
+			SYMBOL './symbols/icon_eki.png'
+		END
+		LABEL
+			COLOR 128 128 128
+			OUTLINECOLOR 255 255 255
+			TYPE TRUETYPE
+			PARTIALS FALSE
+			FONT WTTUIGothic
+			SIZE 10
+			BUFFER 5
+			POSITION auto
+			MINDISTANCE 60
+			ENCODING "UTF-8"
+		END #label
+	END #class
+	PROJECTION
+		"init=epsg:4326"
+	END #projection
+END #layer tetsudo
+
+
+#BASEIMAGE_LAYER
+#LAYER
+#	NAME Tiff1
+#	GROUP Tiff
+#	DATA "/data/tiffimg/0453393401c25.tif"
+#	TYPE RASTER
+#	STATUS ON
+#	PROJECTION
+#		"init=epsg:4326"
+#		"proj=utm"
+#		"ellps=GRS80"
+#		"zone=54"
+#	END #projection
+#	METADATA
+#		"DESCRIPTION" "BASEIMAGE&#174;"
+#	END	#metadata
+#END	#layer
+#
+#LAYER
+#	NAME Tiff2
+#	GROUP Tiff
+#	DATA "/data/tiffimg/0453393501c25.tif"
+#	TYPE RASTER
+#	STATUS ON
+#	PROJECTION
+#		"init=epsg:4326"
+#		"proj=utm"
+#		"ellps=GRS80"
+#		"zone=54"
+#	END #projection
+#END	#layer
+#
+#LAYER
+#	NAME Tiff3
+#	GROUP Tiff
+#	DATA "/data/tiffimg/0453393601c25.tif"
+#	TYPE RASTER
+#	STATUS ON
+#	PROJECTION
+#		"init=epsg:4326"
+#		"proj=utm"
+#		"ellps=GRS80"
+#	"zone=54"
+#	END #projection
+#END	#layer
+
+#LAYER
+#	NAME Tiff4
+#	GROUP Tiff
+#	DATA "/data/tiffimg/0453394401c25.tif"
+#	TYPE RASTER
+#	STATUS ON
+#	PROJECTION
+#		"init=epsg:4326"
+#		"proj=utm"
+#		"ellps=GRS80"
+#		"zone=54"
+#	END #projection
+#END	#layer
+
+#LAYER
+#	NAME Tiff5
+#	GROUP Tiff
+#	DATA "/data/tiffimg/0453394501c25.tif"
+#	TYPE RASTER
+#	STATUS ON
+#	PROJECTION
+#		"init=epsg:4326"
+#		"proj=utm"
+#		"ellps=GRS80"
+#		"zone=54"
+#	END #projection
+#END	#layer
+
+#LAYER
+#	NAME Tiff6
+#	GROUP Tiff
+#	DATA "/data/tiffimg/0453394601c25.tif"
+#	TYPE RASTER
+#	STATUS ON
+#	PROJECTION
+#		"init=epsg:4326"
+#		"proj=utm"
+#		"ellps=GRS80"
+#		"zone=54"
+#	END #projection
+#END	#layer
+
+#END_BASEIMAGE_LAYER
+
+
+LAYER
+	LABELITEM "namae"
+	NAME "kokyoshisetsu"	#公共
+	GROUP "tatemono"
+	TRANSPARENCY alpha
+	CONNECTIONTYPE postgis
+	CONNECTION "user=postgres dbname=tmap host=localhost password=psql port=5432"
+	DATA "geom from kokyoshisetsu"
+	STATUS ON
+	#SYMBOLSCALE 10000
+	TYPE POINT
+	CLASS
+		NAME "東京電機大学"
+		# NAME "TDU"
+		EXPRESSION ('[id]'='KO13101000220')
+		#MAXSCALE 100000
+		COLOR 255 255 0
+		STYLE
+			SYMBOL './symbols/tdu.gif'
+		END
+		SIZE 14
+		LABEL
+			COLOR 255 255 255
+			OUTLINECOLOR 0 0 0
+			ANTIALIAS TRUE
+			PARTIALS FALSE
+			TYPE TRUETYPE
+			FONT WTTUIGothic
+			SIZE 10
+			POSITION cc
+			ENCODING "UTF-8"
+		END #label
+	END #class
+END#layer
+
+END # end of map file/object

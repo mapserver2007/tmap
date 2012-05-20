@@ -1,0 +1,148 @@
+* {
+	box-sizing : border-box;
+	/*-moz-box-sizing : border-box;*/
+	font-family : Meiryo, 'メイリオ', 'Lucida Grande', Verdana, Arial, sans-serif;
+}
+
+/* モロバレhack */
+body div {
+	text-align: left;
+	margin: 0 auto;
+}
+
+p {
+	margin: 0px;
+	padding: 0px;
+}
+
+h1 {
+	font-family:Helvetica,Verdana, Arial, sans-serif;
+	text-decoration : none;
+	color : #333333;
+	font-size : small;
+}
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+.form {
+	border:1px solid #808080;
+	margin: 0px;
+}
+
+.form_textarea {
+	border:1px solid #808080;
+	margin: 0px; 
+}
+
+/* 魔法のタグ */
+* { box-sizing : border-box}
+* { -moz-box-sizing : border-box}
+
+/* clearfix */
+.clearfix: after {
+	content: "."; 
+	display: block; 
+	height: 0; 
+	clear: both; 
+	visibility: hidden;
+}
+
+.widehead {
+	border : 1px solid #333333;
+	background-color : #333333;
+	width : 100%;
+	color : #ffffff;
+	margin-bottom : 7px;
+	font-size : medium;
+	font-weight : bold;
+}
+
+/*.widehead span {
+	padding : 10px 15px;
+}
+*/
+
+.widehead ul {
+	margin : 2px;
+	padding : 0px;
+}
+
+.widehead li {
+	display : inline;
+	margin-right : 5px;
+}
+
+.widehead a {
+	color : #ffffff;
+	padding : 10px 15px;
+	text-decoration : none;
+}
+
+/* Main Container */
+#main_container {
+	margin : 4px;
+	position : relative;
+}
+
+/* Header Container */
+#header_container {
+	position : relative;
+	border-top : 1px dashed #cccccc;
+	border-bottom : 1px dashed #cccccc;
+	color : #dadada;
+	/*background : url(../image/bg.png) no-repeat scroll 0%;*/
+	height : 100px;
+	margin-bottom : 5px;
+	text-align : left;
+}
+
+/* TMAP Container */
+#demo_container {
+	float : left;
+	position : relative;
+	border : 1px dashed #cccccc;
+	width : 100%;
+}
+
+.tmap_explain {
+	padding : 10px;
+}
+
+.tmap_explain p {
+	border-left : 0.5em solid #669900;
+	font-size : medium;
+	font-weight : bold;
+	padding : 0 0 0 0.3em;
+}
+
+.tmap_use_explain {
+	padding : 10px;
+	margin : 10px;
+	font-size : small;
+	border : 1px solid #333333;
+}
+
+.tmap_use_explain p {
+	border-left : 0.5em solid #669900;
+	font-size : medium;
+	font-weight : bold;
+	padding : 0 0 0 0.3em;
+}
+
+.tmap_use_explain ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+.tmap_use_explain li {
+	text-align: left;
+	margin-left: 2px;
+	padding-left: 10px;
+	list-style-type:none;
+	/*background: url(../images/entry/list.gif) no-repeat scroll left center;*/
+}
+
+
